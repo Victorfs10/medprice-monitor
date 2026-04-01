@@ -2,7 +2,6 @@
 
 A Python REST API for monitoring and tracking medication prices across Brazilian pharmacies.
 
-Built as a portfolio project to study web scraping, layered architecture, and workflow automation.
 
 ## Overview
 

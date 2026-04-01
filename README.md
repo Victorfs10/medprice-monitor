@@ -1,4 +1,4 @@
-# medprice-monitor
+# Medprice-monitor
 
 A Python REST API for monitoring and tracking medication prices across Brazilian pharmacies.
 

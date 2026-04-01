@@ -5,7 +5,7 @@ A Python REST API for monitoring and tracking medication prices across Brazilian
 
 ## Overview
 
-medprice-monitor collects and stores price data from pharmacy websites, allowing you to track price history per product and per store. Scraping is orchestrated by an external **n8n** workflow that triggers the API on a schedule — and in the future will also send price alerts via WhatsApp and email.
+The Medprice-monitor project collects and stores price data from pharmacy websites, allowing you to track price history per product and per store. Scraping is orchestrated by an external **n8n** workflow that triggers the API on a schedule — and in the future will also send price alerts via WhatsApp and email.
 
 ## Stack
 
@@ -61,7 +61,7 @@ n8n (cron) → POST /scrape/<farmacia> → scraper_service → Scraper → Postg
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/medprice-monitor.git
+git clone https://github.com/Victorfs10/medprice-monitor.git
 cd medprice-monitor
 ```
 
@@ -158,7 +158,7 @@ Content-Type: application/json
 }
 ```
 
-## n8n Integration
+## N8n Integration
 
 Scraping is triggered by an n8n workflow running on a schedule. The workflow calls `POST /scrape/<farmacia>` with the desired search query. Future workflows will also call `GET /precos` and dispatch price alerts via WhatsApp and email.
 
@@ -196,7 +196,3 @@ Each scraper should return a list of dicts with the following fields:
 - [ ] Price alert notifications (WhatsApp / Email)
 - [ ] More pharmacy sources
 - [ ] Price history charts
-
-## License
-
-MIT

@@ -103,7 +103,7 @@ CREATE TABLE precos (
     preco NUMERIC(10,2),
     farmacia TEXT,
     url TEXT,
-    collected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -125,6 +125,22 @@ GET /precos
 ```
 
 Returns the 100 most recent price records.
+
+**Response:**
+
+```json
+[
+  {
+    "id": 1,
+    "nome": "Dipirona Sódica 500mg 20 Comprimidos",
+    "ean": "7896714274065",
+    "preco": "8.99",
+    "farmacia": "drogaria_sao_paulo",
+    "url": "https://www.drogariasaopaulo.com.br/...",
+    "created_at": "07/04/2026"
+  }
+]
+```
 
 ### Get price by ID
 
@@ -158,7 +174,7 @@ Content-Type: application/json
 }
 ```
 
-## N8n Integration
+## n8n Integration
 
 Scraping is triggered by an n8n workflow running on a schedule. The workflow calls `POST /scrape/<farmacia>` with the desired search query. Future workflows will also call `GET /precos` and dispatch price alerts via WhatsApp and email.
 

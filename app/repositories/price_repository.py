@@ -1,4 +1,7 @@
+from datetime import timezone, timedelta
 from app.db.connection import get_connection
+
+BRT = timezone(timedelta(hours=-3))
 
 
 def find_produto_by_ean(ean: str):
@@ -43,13 +46,20 @@ def find_all_precos() -> list[dict]:
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT p.id, pr.nome, pr.ean, p.preco, p.farmacia, p.url, p.collected_at
+                SELECT p.id, pr.nome, pr.ean, p.preco, p.farmacia, p.url, p.created_at
                 FROM precos p
                 JOIN produtos pr ON pr.id = p.produto_id
-                ORDER BY p.collected_at DESC
+                ORDER BY p.created_at DESC
                 LIMIT 100
             """)
-            return [dict(row) for row in cur.fetchall()]
+            rows = cur.fetchall()
+            result = []
+            for row in rows:
+                r = dict(row)
+                if r.get("created_at"):
+                    r["created_at"] = r["created_at"].replace(tzinfo=timezone.utc).astimezone(BRT).strftime("%d/%m/%Y")
+                result.append(r)
+            return result
     finally:
         conn.close()
 
@@ -59,12 +69,17 @@ def find_preco_by_id(id: int):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT p.id, pr.nome, pr.ean, p.preco, p.farmacia, p.url, p.collected_at
+                SELECT p.id, pr.nome, pr.ean, p.preco, p.farmacia, p.url, p.created_at
                 FROM precos p
                 JOIN produtos pr ON pr.id = p.produto_id
                 WHERE p.id = %s
             """, (id,))
             row = cur.fetchone()
-            return dict(row) if row else None
+            if not row:
+                return None
+            r = dict(row)
+            if r.get("created_at"):
+                r["created_at"] = r["created_at"].replace(tzinfo=timezone.utc).astimezone(BRT).strftime("%d/%m/%Y")
+            return r
     finally:
         conn.close()
